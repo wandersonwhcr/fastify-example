@@ -1,0 +1,8 @@
+{
+  "name": "@wandersonwhcr/artists",
+  "version": "1.0.0-alpha",
+  "description": "Artists",
+  "main": "index.js",
+  "author": "Wanderson Camargo <wandersonwhcr@gmail.com>",
+  "license": "MIT"
+}
