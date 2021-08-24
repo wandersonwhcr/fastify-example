@@ -34,5 +34,20 @@ services:
     working_dir: "/app"
     command: "npm run dev"
 
+  albums:
+    image: "node:16.7-alpine"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.albums.rule=Host(`albums.localhost`)"
+      - "traefik.http.services.albums.loadbalancer.server.port=3000"
+    volumes:
+      - "./services/albums:/app"
+    environment:
+      PORT: "3000"
+      MONGODB_URL: "mongodb://mongodb/albums"
+    user: "${UID:-1000}:${GID:-1000}"
+    working_dir: "/app"
+    command: "npm run dev"
+
 volumes:
   mongodb:
