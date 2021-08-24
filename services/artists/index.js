@@ -25,4 +25,26 @@ fastify.get('/', {
   },
 });
 
+// LISTAR ARTISTAS =================================================================================
+
+fastify.get('/v1/artists', {
+  schema: {
+    type: 'array',
+    items: {
+      type: 'object',
+      required: ['_id', 'name'],
+      parameters: {
+        _id: { type: 'string', format: 'uuid' },
+        name: { type: 'string' },
+      },
+    },
+  },
+  handler: async function (req, res) {
+    const result = await this.mongo.db.collection('artists').find().toArray();
+
+    res.status(200)
+      .send(result);
+  },
+});
+
 fastify.listen(process.env.PORT, '0.0.0.0');
