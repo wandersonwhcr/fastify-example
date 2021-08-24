@@ -14,6 +14,11 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker=true"
 
+  mongodb:
+    image: "mongo:5.0"
+    volumes:
+      - "mongodb:/data/db"
+
   artists:
     image: "node:16.7-alpine"
     labels:
@@ -24,6 +29,10 @@ services:
       - "./services/artists:/app"
     environment:
       PORT: "3000"
+      MONGODB_URL: "mongodb://mongodb/artists"
     user: "${UID:-1000}:${GID:-1000}"
     working_dir: "/app"
     command: "npm run dev"
+
+volumes:
+  mongodb:
