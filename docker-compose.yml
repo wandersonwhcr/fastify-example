@@ -16,7 +16,14 @@ services:
 
   artists:
     image: "node:16.7-alpine"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.artists.rule=Host(`artists.localhost`)"
+      - "traefik.http.services.artists.loadbalancer.server.port=3000"
     volumes:
       - "./services/artists:/app"
+    environment:
+      PORT: "3000"
     user: "${UID:-1000}:${GID:-1000}"
     working_dir: "/app"
+    command: "npm run dev"
