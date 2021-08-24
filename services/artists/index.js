@@ -105,6 +105,39 @@ fastify.post('/v1/artists', {
   },
 });
 
+// ATUALIZAR ARTISTA ===============================================================================
+
+fastify.put('/v1/artists/:_id', {
+  schema: {
+    params: {
+      _id: { type: 'string', format: 'uuid' },
+    },
+    body: {
+      type: 'object',
+      required: ['name'],
+      properties: {
+        name: { type: 'string' },
+      },
+    },
+  },
+  handler: async function (req, res) {
+    const _id = UUID.fromString(req.params._id);
+
+    const result = await this.mongo.db.collection('artists')
+      .updateOne({ _id }, { $set: req.body });
+
+    if (result.matchedCount === 0) {
+      res.status(404)
+        .send();
+
+      return;
+    }
+
+    res.status(204)
+      .send();
+  },
+});
+
 // REMOVER ARTISTA =================================================================================
 
 fastify.delete('/v1/artists/:_id', {
