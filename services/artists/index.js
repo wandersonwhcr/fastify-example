@@ -64,6 +64,10 @@ fastify.get('/v1/artists', {
   handler: async function (req, res) {
     const result = await this.mongo.db.collection('artists').find().toArray();
 
+    result.forEach((element) => {
+      element._id = UUID.fromBinary(element._id);
+    });
+
     res.status(200)
       .send(result);
   },
