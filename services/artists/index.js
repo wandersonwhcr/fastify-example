@@ -105,4 +105,30 @@ fastify.post('/v1/artists', {
   },
 });
 
+// REMOVER ARTISTA =================================================================================
+
+fastify.delete('/v1/artists/:_id', {
+  schema: {
+    params: {
+      _id: { type: 'string', format: 'uuid' },
+    },
+  },
+  handler: async function (req, res) {
+    const _id = UUID.fromString(req.params._id);
+
+    const result = await this.mongo.db.collection('artists')
+      .deleteOne({ _id });
+
+    if (result.deletedCount === 0) {
+      res.status(404)
+        .send();
+
+      return;
+    }
+
+    res.status(204)
+      .send();
+  },
+});
+
 fastify.listen(process.env.PORT, '0.0.0.0');
