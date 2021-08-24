@@ -29,7 +29,7 @@ fastify.get('/', {
   schema: {
     type: 'object',
     required: ['name', 'version'],
-    parameters: {
+    properties: {
       name: { type: 'string' },
       version: { type: 'string' },
     },
@@ -53,7 +53,7 @@ fastify.get('/v1/artists', {
         items: {
           type: 'object',
           required: ['_id', 'name'],
-          parameters: {
+          properties: {
             _id: { type: 'string', format: 'uuid' },
             name: { type: 'string' },
           },
@@ -76,7 +76,7 @@ fastify.post('/v1/artists', {
     body: {
       type: 'object',
       required: ['name'],
-      parameters: {
+      properties: {
         name: { type: 'string' },
       },
     },
@@ -84,8 +84,8 @@ fastify.post('/v1/artists', {
       201: {
         type: 'object',
         required: ['_id'],
-        parameters: {
-          _id: { type: 'string', format: 'uuid' },
+        properties: {
+          _id: { type: 'string' },
         },
       },
     },
