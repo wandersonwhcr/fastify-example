@@ -1,3 +1,21 @@
+const { Binary } = require('mongodb');
+const uuid = require('uuid');
+
+class UUID extends Binary {
+  constructor(buffer) {
+    super(buffer, Binary.SUBTYPE_UUID);
+  }
+  static fromBinary(content) {
+    return new UUID(content.buffer);
+  }
+  static fromString(content) {
+    return new UUID(uuid.parse(content));
+  }
+  toString() {
+    return uuid.stringify(this.buffer);
+  }
+}
+
 const fastify = require('fastify')({
   logger: true,
 });
@@ -29,13 +47,17 @@ fastify.get('/', {
 
 fastify.get('/v1/artists', {
   schema: {
-    type: 'array',
-    items: {
-      type: 'object',
-      required: ['_id', 'name'],
-      parameters: {
-        _id: { type: 'string', format: 'uuid' },
-        name: { type: 'string' },
+    response: {
+      200: {
+        type: 'array',
+        items: {
+          type: 'object',
+          required: ['_id', 'name'],
+          parameters: {
+            _id: { type: 'string', format: 'uuid' },
+            name: { type: 'string' },
+          },
+        },
       },
     },
   },
@@ -44,6 +66,38 @@ fastify.get('/v1/artists', {
 
     res.status(200)
       .send(result);
+  },
+});
+
+// ADICIONAR ARTISTA ===============================================================================
+
+fastify.post('/v1/artists', {
+  schema: {
+    body: {
+      type: 'object',
+      required: ['name'],
+      parameters: {
+        name: { type: 'string' },
+      },
+    },
+    response: {
+      201: {
+        type: 'object',
+        required: ['_id'],
+        parameters: {
+          _id: { type: 'string', format: 'uuid' },
+        },
+      },
+    },
+  },
+  handler: async function (req, res) {
+    const _id = UUID.fromString(uuid.v4());
+
+    await this.mongo.db.collection('artists')
+      .insertOne({ _id, ...req.body });
+
+    res.status(201)
+      .send({ _id });
   },
 });
 
