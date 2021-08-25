@@ -6,6 +6,7 @@
   "author": "Wanderson Camargo <wandersonwhcr@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.21.1",
     "fastify": "^3.20.2",
     "fastify-mongodb": "^4.1.0",
     "mongodb": "^4.1.1",

@@ -1,5 +1,6 @@
-const { Binary } = require('mongodb');
+const axios = require('axios');
 const uuid = require('uuid');
+const { Binary } = require('mongodb');
 
 class UUID extends Binary {
   constructor(buffer) {
@@ -111,6 +112,15 @@ fastify.post('/v1/albums', {
   },
   handler: async function (req, res) {
     const _id = UUID.fromString(uuid.v4());
+
+    try {
+      await axios.head(process.env.ARTISTS_URL + '/v1/artists/' + req.body.artist._id);
+    } catch {
+      res.status(422)
+        .send();
+
+      return;
+    }
 
     req.body.artist._id = UUID.fromString(req.body.artist._id);
 

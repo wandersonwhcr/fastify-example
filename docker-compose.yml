@@ -28,8 +28,8 @@ services:
     volumes:
       - "./services/artists:/app"
     environment:
-      PORT: "3000"
       MONGODB_URL: "mongodb://mongodb/artists"
+      PORT: "3000"
     user: "${UID:-1000}:${GID:-1000}"
     working_dir: "/app"
     command: "npm run dev"
@@ -43,8 +43,9 @@ services:
     volumes:
       - "./services/albums:/app"
     environment:
-      PORT: "3000"
+      ARTISTS_URL: "http://artists:3000"
       MONGODB_URL: "mongodb://mongodb/albums"
+      PORT: "3000"
     user: "${UID:-1000}:${GID:-1000}"
     working_dir: "/app"
     command: "npm run dev"
