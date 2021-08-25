@@ -1,5 +1,14 @@
 # fastify-example
 
+## Instalação
+
+```
+docker-compose run --rm artists npm install
+docker-compose run --rm albums npm install
+
+docker-compose up --detach
+```
+
 ## Artistas
 
 ### Listar
