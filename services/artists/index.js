@@ -105,6 +105,44 @@ fastify.post('/v1/artists', {
   },
 });
 
+// APRESENTAR ARTISTA ==============================================================================
+
+fastify.get('/v1/artists/:_id', {
+  schema: {
+    params: {
+      _id: { type: 'string', format: 'uuid' },
+    },
+    response: {
+      200: {
+        type: 'object',
+        required: ['_id', 'name'],
+        properties: {
+          _id: { type: 'string', format: 'uuid' },
+          name: { type: 'string' },
+        },
+      },
+    },
+  },
+  handler: async function (req, res) {
+    const _id = UUID.fromString(req.params._id);
+
+    const result = await this.mongo.db.collection('artists')
+      .findOne({ _id });
+
+    if (! result) {
+      res.status(404)
+        .send();
+
+      return;
+    }
+
+    result._id = UUID.fromBinary(result._id);
+
+    res.status(200)
+      .send(result);
+  },
+});
+
 // ATUALIZAR ARTISTA ===============================================================================
 
 fastify.put('/v1/artists/:_id', {
