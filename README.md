@@ -46,6 +46,16 @@ Date: Wed, 25 Aug 2021 11:28:00 GMT
 {"_id":"452fae7f-7945-4442-bfc6-d59253f668cf","name":"Dio"}
 ```
 
+### Existe?
+
+```
+curl --include --head \
+    http://artists.localhost/v1/artists/452fae7f-7945-4442-bfc6-d59253f668cf
+
+HTTP/1.1 204 No Content
+Date: Wed, 25 Aug 2021 11:44:00 GMT
+```
+
 ### Atualizar
 
 ```

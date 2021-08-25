@@ -143,6 +143,32 @@ fastify.get('/v1/artists/:_id', {
   },
 });
 
+// EXISTE ARTISTA? =================================================================================
+
+fastify.head('/v1/artists/:_id', {
+  schema: {
+    params: {
+      _id: { type: 'string', format: 'uuid' },
+    },
+  },
+  handler: async function (req, res) {
+    const _id = UUID.fromString(req.params._id);
+
+    const result = await this.mongo.db.collection('artists')
+      .findOne({ _id }, { projection: { _id: 1 } });
+
+    if (! result) {
+      res.status(404)
+        .send();
+
+      return;
+    }
+
+    res.status(204)
+      .send();
+  },
+});
+
 // ATUALIZAR ARTISTA ===============================================================================
 
 fastify.put('/v1/artists/:_id', {
